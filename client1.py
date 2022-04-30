@@ -29,11 +29,12 @@ def jsonToDf(rdd):
 	global bsize
 	if not rdd.isEmpty():
 		df = spark.read.json(rdd)
-		batch_df = df.select(col("0.*")).withColumnRenamed('feature0','Id').withColumnRenamed('feature1','Dates').withColumnRenamed('feature3','PdDistrict').withColumnRenamed('feature4','Address').withColumnRenamed('feature5','X').withColumnRenamed('feature6','Y')
+		batch_df = df.select(col("0.*")).withColumnRenamed('feature0','Sentiment').withColumnRenamed('feature1','Tweet')
 		for row_no in range(1, bsize):
 			s = str(row_no)+".*"
-			df3 = df.select(col(s)).withColumnRenamed('feature0','Id').withColumnRenamed('feature1','Dates').withColumnRenamed('feature3','PdDistrict').withColumnRenamed('feature4','Address').withColumnRenamed('feature5','X').withColumnRenamed('feature6','Y')
+			df3 = df.select(col(s)).withColumnRenamed('feature0','Sentiment').withColumnRenamed('feature1','Tweet')
 			batch_df = batch_df.union(df3)
+		print(batch_df)
 		return batch_df
 	return None
 		
@@ -43,6 +44,7 @@ lines = ssc.socketTextStream('localhost', 6100)
 #lines = lines.foreachRDD(makeRDD)
 lines.foreachRDD(lambda rdd: jsonToDf(rdd))
 #lines = jsonToDf(lines)
+
 
 
 print('##################################################### printing words..')
