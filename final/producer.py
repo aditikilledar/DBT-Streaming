@@ -22,21 +22,11 @@ print(record_metadata.partition)
 print(record_metadata.offset)
 
 # produce keyed messages to enable hashed partitioning
-producer.send('my-topic', key=b'foo', value=b'bar')
+producer.send('my-topic', key=b'mytopick', value=b'foo')
 
-# encode objects via msgpack
-# producer = KafkaProducer(
-#     value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-# producer.send('msgpack-topic', {'key': 'value'})
 
-# # produce json messages
-# producer = KafkaProducer(
-#     value_serializer=lambda m: json.dumps(m).encode('ascii'))
-# producer.send('', {'key': 'value'})
-
-# produce asynchronously
 for _ in range(100):
-    producer.send('test',key=b'lol', value=b'msg')
+    producer.send('test',key=b'testk', value=b'msg')
 
 
 def on_send_success(record_metadata):
