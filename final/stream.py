@@ -15,18 +15,10 @@ from pyspark.sql.functions import split
 
 
 
-# Create a local StreamingContext with two working thread and batch interval of 1 second
-# sc = SparkContext("local[2]", "NetworkWordCount")
-# ssc = StreamingContext(sc, 1)
-# lines = ssc.socketTextStream("localhost", 5556)
-# words = lines.flatMap(lambda line: line.split(" "))
-# pairs = words.map(lambda word: (word, 1))
-# wordCounts = pairs.reduceByKey(lambda x, y: x + y)
 
-# # Print the first ten elements of each RDD generated in this DStream to the console
-# wordCounts.pprint()
+
 def send_to_kafka(rows):
-    #producer = KafkaProducer(bootstrap_servers = util.get_broker_metadata())
+    
         word = rows[0]
         count = rows[1]
         print(rows)
@@ -35,15 +27,12 @@ def send_to_kafka(rows):
         bootstrap_servers=['localhost:9092'], api_version=(0, 10, 1), value_serializer=lambda x: 
                          dumps(x).encode('utf-8'))
 
-        # Asynchronous by defaul
-
-        # Successful result returns assigned partition and offset
-        # t = bytes(count);
+        
         v= {rows[0]:rows[1]}
         if(word == 'NCT' or word == "BLACKPINK" or word == 'EXO' or word == 'SHINEE' or word == 'AESPA'):
             producer.send(word,value=v)
-            print("============================got a tweet==================================");
-            #producer.flush()
+            print("$$$$$$$$$$$$$$$$$$$$$$$$TWEET RECIEVED$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+           
 
 
 if __name__ == "__main__":
@@ -57,19 +46,7 @@ if __name__ == "__main__":
     wordCounts.foreachRDD(lambda rdd: rdd.foreach(send_to_kafka))
     ssc.start()             # Start the computation
     ssc.awaitTermination()
-    # encode objects via msgpack
-    # producer = KafkaProducer(
-    #     value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-    # producer.send('msgpack-topic', {'key': 'value'})
-
-    # # produce json messages
-    # producer = KafkaProducer(
-    #     value_serializer=lambda m: json.dumps(m).encode('ascii'))
-    # producer.send('', {'key': 'value'})
-
-    # produce asynchronously
-    # for _ in range(100):
-    #     producer.send('lol', b'msg')
+    
 
 
 def on_send_success(record_metadata):
@@ -79,16 +56,5 @@ def on_send_success(record_metadata):
 
 
 def on_send_error(excp):
-    log.error('I am an errback', exc_info=excp)
-        # handle exception
-
-
-    # # produce asynchronously with callbacks
-    # producer.send(
-    #     'test', b'raw_bytes').add_callback(on_send_success).add_errback(on_send_error)
-
-    # # block until all async messages are sent
-    # producer.flush()
-
-    # # configure multiple retries
-    # producer = KafkaProducer(retries=5)
+    log.error('ERROR', exc_info=excp)
+    
