@@ -34,8 +34,8 @@ def send_tweets_to_spark(http_resp, tcp_connection):
         try:
             full_tweet = json.loads(line)
             tweet_text = full_tweet['text']
-            print("Tweet Text: " + tweet_text)
-            print("------------------------------------------")
+            print("Tweet: " + tweet_text)
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             tcp_connection.send(tweet_text + '\n')
         except:
             e = sys.exc_info()[0]
@@ -50,6 +50,6 @@ s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 print("Waiting for TCP connection...")
 conn, addr = s.accept()
-print("Connected... Starting getting tweets.")
+print("Connected... getting tweets.")
 resp = get_tweets()
 send_tweets_to_spark(resp, conn)
