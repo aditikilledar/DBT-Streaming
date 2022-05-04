@@ -4,5 +4,5 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client.dbt
 d = db["kpop"];
 
-mydict = { "name": "John", "address": "Highway 37" }
-d.insert_one(mydict);
+#mydict = { "name": "John", "address": "Highway 37" }
+#d.insert_one(mydict);
