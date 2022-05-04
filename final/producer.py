@@ -36,7 +36,7 @@ def on_send_success(record_metadata):
 
 
 def on_send_error(excp):
-    log.error('I am an errback', exc_info=excp)
+    log.error('This is an error', exc_info=excp)
     # handle exception
 
 

@@ -14,7 +14,7 @@ future = producer.send('test', b'raw_bytes')
 try:
     record_metadata = future.get(timeout=10)
 except KafkaError:
-    # Decide what to do if produce request failed...
+# if prod req fails
     log.exception()
     pass
 
@@ -25,7 +25,7 @@ def on_send_success(record_metadata):
 
 
 def on_send_error(excp):
-    log.error('I am an errback', exc_info=excp)
+    log.error('This is an error.', exc_info=excp)
 # Successful result returns assigned partition and offset
 print(record_metadata.topic)
 print(record_metadata.partition)
@@ -49,36 +49,6 @@ wordCounts.foreachRDD(lambda r: r.foreach(send))
 wordCounts.pprint()
 ssc.start()             # Start the computation
 ssc.awaitTermination()
-
-
-
-
-
-
-# produce keyed messages to enable hashed partitioning
-#producer.send('my-topic', key=b'foo', value=b'bar')
-
-# encode objects via msgpack
-# producer = KafkaProducer(
-#     value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-# producer.send('msgpack-topic', {'key': 'value'})
-
-# # produce json messages
-# producer = KafkaProducer(
-#     value_serializer=lambda m: json.dumps(m).encode('ascii'))
-# producer.send('', {'key': 'value'})
-
-# produce asynchronously
-#for _ in range(100):
-   # producer.send('test', b'msg')
-
-
-
-    # handle exception
-
-
-# produce asynchronously with callbacks
-
 
 # block until all async messages are sent
 producer.flush()

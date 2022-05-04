@@ -32,4 +32,3 @@ query = wordCounts \
     .start()
 
 query.awaitTermination()
-
