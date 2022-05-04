@@ -10,7 +10,7 @@ consumer_secret = "eeRF19jxEastmCtp0CYj4X86ZKfiOCNb6KzAnXGmJdrQN7q2vO"
 access_token = "942255638205177858-KiRafYc6uQDkCmXUIracz3ljk6KT6NM"
 access_secret = "WLzqah0oGNN46KpYlWZpcETU7NUPJI9ng3SvFVkqhfV12"
 
-# we create this class that inherits from the StreamListener in tweepy StreamListener
+# TweetsListener inherits from tweepy StreamListener
 
 
 class TweetsListener(tweepy.Stream):
@@ -18,7 +18,7 @@ class TweetsListener(tweepy.Stream):
     def __init__(self, csocket, *args):
         super().__init__(*args)
         self.client_socket = csocket
-    # we override the on_data() function in StreamListener
+    # overriding the on_data() function in StreamListener
 
     def on_data(self, data):
         try:
@@ -27,7 +27,7 @@ class TweetsListener(tweepy.Stream):
             self.client_socket.send(message['text'].encode('utf-8'))
             return True
         except BaseException as e:
-            print("Error on_data: %s" % str(e))
+            print("Error %s" % str(e))
         return True
 
     def if_error(self, status):
@@ -41,7 +41,7 @@ def send_tweets(c_socket):
 
     twitter_stream = TweetsListener(
         c_socket, consumer_key, consumer_secret, access_token, access_secret)
-    # we are interested in this topic.
+    
     twitter_stream.filter(track=['NCT'])
 
 
@@ -54,9 +54,9 @@ if __name__ == "__main__":
     print("Now listening on port: %s" % str(port))
 
     new_skt.listen(5)  # waiting for client connection.
-    # Establish connection with client. it returns first a socket object,c, and the address bound to the socket
+    
     c, addr = new_skt.accept()
 
     print("Received request from: " + str(addr))
-    # and after accepting the connection, we aill sent the tweets through the socket
+    # sending tweets through socket
     send_tweets(c)
