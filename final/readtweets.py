@@ -9,7 +9,7 @@ def write(message):
     d = db["kpop"];
     d.insert_one(message);
 
-# To consume latest messages and auto-commit offsets
+
 consumer = KafkaConsumer('NCT',
                          group_id='my-group',
                          bootstrap_servers=['localhost:9092'], value_deserializer=lambda x: loads(x.decode('utf-8')))
